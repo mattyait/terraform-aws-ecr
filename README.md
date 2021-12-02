@@ -10,7 +10,7 @@ AWS ECR Module which creates
 
     module "ecr" {
     source  = "mattyait/ecr/aws"
-    version = "0.1.0"
+    version = "1.0.0"
 
     image_names = [
         "test",
