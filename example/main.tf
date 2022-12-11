@@ -19,6 +19,7 @@ module "ecr" {
     "test",
     "test1",
   ]
+
   scan_on_push         = true
   image_tag_mutability = "IMMUTABLE"
 
@@ -39,6 +40,7 @@ module "ecr_with_kms" {
     "kms_repo",
     "kms_repo1",
   ]
+
   encryption_type      = "KMS"
   scan_on_push         = true
   image_tag_mutability = "IMMUTABLE"
