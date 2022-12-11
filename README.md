@@ -73,7 +73,7 @@ No modules.
 | <a name="input_max_tagged_image_count"></a> [max\_tagged\_image\_count](#input\_max\_tagged\_image\_count) | The maximum number of tagged images that you want to retain in repository. | `number` | `30` | no |
 | <a name="input_max_untagged_image_count"></a> [max\_untagged\_image\_count](#input\_max\_untagged\_image\_count) | The maximum number of untagged images that you want to retain in repository. | `number` | `1` | no |
 | <a name="input_only_pull_accounts"></a> [only\_pull\_accounts](#input\_only\_pull\_accounts) | AWS accounts which pull only. | `list(string)` | `[]` | no |
-| <a name="input_protected_tags"></a> [protected\_tags](#input\_protected\_tags) | Name of image tags prefixes that should not be destroyed. | `list(string)` | n/a | yes |
+| <a name="input_protected_tags"></a> [protected\_tags](#input\_protected\_tags) | Name of image tags prefixes that should not be destroyed. | `list(string)` | <pre>[<br>  "latest"<br>]</pre> | no |
 | <a name="input_push_and_pull_accounts"></a> [push\_and\_pull\_accounts](#input\_push\_and\_pull\_accounts) | AWS accounts which push and pull. | `list(string)` | `[]` | no |
 | <a name="input_scan_on_push"></a> [scan\_on\_push](#input\_scan\_on\_push) | Whether images should automatically be scanned on push or not. | `bool` | `false` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | The tags for the resources | `map(any)` | `{}` | no |
