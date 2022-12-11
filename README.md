@@ -16,7 +16,7 @@ module "ecr" {
         "test",
         "test1",
     ]
-    
+
     scan_on_push         = true
     image_tag_mutability = "IMMUTABLE"
 
@@ -24,7 +24,7 @@ module "ecr" {
     max_tagged_image_count   = 50
     protected_tags      = ["latest"]
 
-    tags = {    
+    tags = {  
         Environment = "demo"
         Created_By  = "Terraform"
     }
