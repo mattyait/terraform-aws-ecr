@@ -6,6 +6,7 @@ variable "image_names" {
 
 variable "protected_tags" {
   type        = list(string)
+  default     = ["latest"]
   description = "Name of image tags prefixes that should not be destroyed."
 }
 
@@ -48,7 +49,7 @@ variable "image_tag_mutability" {
 variable "encryption_type" {
   description = "The encryption type to use for the repository. Valid values are `AES256` or `KMS`"
   type        = string
-  default     = "KMS"
+  default     = "AES256"
 }
 
 # KMS key
@@ -59,6 +60,7 @@ variable "kms_key" {
 }
 
 variable "tags" {
-  type    = map(any)
-  default = {}
+  description = "The tags for the resources"
+  type        = map(any)
+  default     = {}
 }

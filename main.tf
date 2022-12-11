@@ -84,6 +84,7 @@ resource "aws_ecr_repository" "this" {
       encryption_type = lookup(encryption_configuration.value, "encryption_type")
       kms_key         = lookup(encryption_configuration.value, "kms_key")
     }
+
   }
 
   image_scanning_configuration {
