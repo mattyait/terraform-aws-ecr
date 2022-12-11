@@ -25,10 +25,10 @@ module "ecr" {
     protected_tags      = ["latest"]
 
     tags = {    
-            Environment = "demo"
-            Created_By  = "Terraform"
-        }
+        Environment = "demo"
+        Created_By  = "Terraform"
     }
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->

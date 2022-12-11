@@ -6,6 +6,7 @@ variable "image_names" {
 
 variable "protected_tags" {
   type        = list(string)
+  default     = ["latest"]
   description = "Name of image tags prefixes that should not be destroyed."
 }
 
