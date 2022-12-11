@@ -59,6 +59,7 @@ variable "kms_key" {
 }
 
 variable "tags" {
+  description = "The tags for the resources"
   type    = map(any)
   default = {}
 }
