@@ -7,8 +7,8 @@ AWS ECR Module which creates
 -  ECR policy
 
 ## Usage
-
-    module "ecr" {
+```hcl
+module "ecr" {
     source  = "mattyait/ecr/aws"
     version = "1.0.0"
 
@@ -29,3 +29,4 @@ AWS ECR Module which creates
             Created_By  = "Terraform"
         }
     }
+```

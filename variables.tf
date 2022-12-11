@@ -48,7 +48,7 @@ variable "image_tag_mutability" {
 variable "encryption_type" {
   description = "The encryption type to use for the repository. Valid values are `AES256` or `KMS`"
   type        = string
-  default     = "KMS"
+  default     = "AES256"
 }
 
 # KMS key
