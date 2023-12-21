@@ -7,6 +7,7 @@ AWS ECR Module which creates
 -  ECR policy
 
 ## Usage
+### Private Repository
 ```hcl
 module "ecr" {
     source  = "mattyait/ecr/aws"
@@ -24,10 +25,44 @@ module "ecr" {
     max_tagged_image_count   = 50
     protected_tags      = ["latest"]
 
-    tags = {  
+    tags = {
         Environment = "demo"
         Created_By  = "Terraform"
     }
+}
+```
+
+### Public Repository
+```
+module "public_ecr" {
+  source          = "../"
+  repository_type = "public"
+  image_names = [
+    "test",
+    "test1",
+  ]
+
+  public_repository_catalog_data = [
+    {
+      description       = "Docker container Description test repo"
+      about_text        = "About Text test"
+      usage_text        = "Usage Text test"
+      operating_systems = ["Linux"]
+      architectures     = ["x86"]
+    },
+    {
+      description       = "Docker container Description test1 repo"
+      about_text        = "About Text test1"
+      usage_text        = "Usage Text test1"
+      operating_systems = ["Alpine"]
+      architectures     = ["x86"]
+    }
+  ]
+
+  tags = {
+    Environment = "demo"
+    Created_By  = "Terraform"
+  }
 }
 ```
 
