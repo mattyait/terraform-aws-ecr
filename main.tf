@@ -155,7 +155,7 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_ecrpublic_repository" "this" {
-  for_each   = local.create_public_repository ? toset(local.image_names) : []
+  for_each = local.create_public_repository ? toset(local.image_names) : []
 
   repository_name = each.value
 
