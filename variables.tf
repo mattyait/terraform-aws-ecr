@@ -1,3 +1,9 @@
+variable "repository_type" {
+  description = "The type of repository to create(public or private)"
+  type        = string
+  default     = "private"
+}
+
 variable "image_names" {
   type        = list(string)
   default     = []
@@ -62,5 +68,11 @@ variable "kms_key" {
 variable "tags" {
   description = "The tags for the resources"
   type        = map(any)
+  default     = {}
+}
+
+variable "public_repository_catalog_data" {
+  description = "Catalog data configuration for the public repository"
+  type        = any
   default     = {}
 }

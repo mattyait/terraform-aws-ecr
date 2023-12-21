@@ -5,10 +5,12 @@ locals {
       kms_key         = var.encryption_type == "KMS" && var.kms_key == null ? aws_kms_key.kms_key[0].arn : var.kms_key
     }
   ]
-}
-locals {
   image_names = length(var.image_names) > 0 ? var.image_names : []
+
+  create_private_repository = var.repository_type == "private"
+  create_public_repository  = var.repository_type == "public"
 }
+
 
 locals {
   untagged_image_rule = [{
@@ -62,19 +64,19 @@ locals {
 }
 
 resource "aws_kms_key" "kms_key" {
-  count       = var.encryption_type == "KMS" && var.kms_key == null ? 1 : 0
+  count       = (local.create_private_repository && var.encryption_type == "KMS" && var.kms_key == null) ? 1 : 0
   description = "ECR KMS key for ECR"
   tags        = var.tags
 }
 
 resource "aws_kms_alias" "kms_key_alias" {
-  count         = var.encryption_type == "KMS" && var.kms_key == null ? 1 : 0
+  count         = (local.create_private_repository && var.encryption_type == "KMS" && var.kms_key == null) ? 1 : 0
   name          = "alias/ecrkey"
   target_key_id = aws_kms_key.kms_key[0].key_id
 }
 
 resource "aws_ecr_repository" "this" {
-  for_each             = toset(local.image_names)
+  for_each             = local.create_private_repository ? toset(local.image_names) : []
   name                 = each.value
   image_tag_mutability = var.image_tag_mutability
 
@@ -94,7 +96,7 @@ resource "aws_ecr_repository" "this" {
 }
 
 resource "aws_ecr_repository_policy" "this" {
-  for_each   = toset(local.image_names)
+  for_each   = local.create_private_repository ? toset(local.image_names) : []
   repository = aws_ecr_repository.this[each.value].name
   policy     = data.aws_iam_policy_document.push_and_pull.json
 }
@@ -118,7 +120,7 @@ data "aws_iam_policy_document" "only_pull" {
 
 # Allows specific accounts to push and pull images
 data "aws_iam_policy_document" "push_and_pull" {
-  source_json = data.aws_iam_policy_document.only_pull.json
+  source_policy_documents = [data.aws_iam_policy_document.only_pull.json]
 
   statement {
     sid    = "ElasticContainerRegistryPushAndPull"
@@ -139,7 +141,7 @@ data "aws_iam_policy_document" "push_and_pull" {
 }
 
 resource "aws_ecr_lifecycle_policy" "this" {
-  for_each   = toset(local.image_names)
+  for_each   = local.create_private_repository ? toset(local.image_names) : []
   repository = aws_ecr_repository.this[each.value].name
   policy = jsonencode({
     rules = concat(local.protected_tag_rules, local.untagged_image_rule, local.remove_old_image_rule)
@@ -149,3 +151,25 @@ resource "aws_ecr_lifecycle_policy" "this" {
 
 
 data "aws_caller_identity" "current" {}
+
+
+
+resource "aws_ecrpublic_repository" "this" {
+  for_each   = local.create_public_repository ? toset(local.image_names) : []
+
+  repository_name = each.value
+
+  dynamic "catalog_data" {
+    for_each = length(var.public_repository_catalog_data) > 0 ? [var.public_repository_catalog_data] : []
+    content {
+      about_text        = try(catalog_data.value[index(local.image_names, each.value)].about_text, null)
+      architectures     = try(catalog_data.value[index(local.image_names, each.value)].architectures, null)
+      description       = try(catalog_data.value[index(local.image_names, each.value)].description, null)
+      logo_image_blob   = try(catalog_data.value[index(local.image_names, each.value)].logo_image_blob, null)
+      operating_systems = try(catalog_data.value[index(local.image_names, each.value)].operating_systems, null)
+      usage_text        = try(catalog_data.value[index(local.image_names, each.value)].usage_text, null)
+    }
+  }
+
+  tags = var.tags
+}
