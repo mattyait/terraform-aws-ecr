@@ -33,5 +33,3 @@ output "repository_arn_map" {
   )
   description = "Map of repository names to repository ARNs"
 }
-
-
